@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public static class Arrays
 {
-    /// <summary>
+    /// <summary >
     /// This function will produce an array of size 'length' starting with 'number'
     /// followed by multiples of 'number'.  
     /// For example, MultiplesOf(7, 5) will result in: {7, 14, 21, 28, 35}.
