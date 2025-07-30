@@ -1,11 +1,15 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class LinkedList : IEnumerable<int>
 {
     private Node? _head;
     private Node? _tail;
 
-    // Insert at head
+    /// <summary>
+    /// Insert a new node at the front (head) of the linked list.
+    /// </summary>
     public void InsertHead(int value)
     {
         Node newNode = new(value);
@@ -22,7 +26,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Problem 1: Insert at tail
+    /// <summary>
+    /// Insert a new node at the back (tail) of the linked list.
+    /// </summary>
     public void InsertTail(int value)
     {
         Node newNode = new(value);
@@ -39,7 +45,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Remove head
+    /// <summary>
+    /// Remove the first node (head) of the linked list.
+    /// </summary>
     public void RemoveHead()
     {
         if (_head == _tail)
@@ -54,7 +62,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Problem 2: Remove tail
+    /// <summary>
+    /// Remove the last node (tail) of the linked list.
+    /// </summary>
     public void RemoveTail()
     {
         if (_head == _tail)
@@ -69,7 +79,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Insert after first occurrence of a value
+    /// <summary>
+    /// Insert 'newValue' after the first occurrence of 'value'.
+    /// </summary>
     public void InsertAfter(int value, int newValue)
     {
         Node? curr = _head;
@@ -95,7 +107,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Problem 3: Remove node by value
+    /// <summary>
+    /// Remove the first node that contains 'value'.
+    /// </summary>
     public void Remove(int value)
     {
         Node? curr = _head;
@@ -104,13 +118,9 @@ public class LinkedList : IEnumerable<int>
             if (curr.Data == value)
             {
                 if (curr == _head)
-                {
                     RemoveHead();
-                }
                 else if (curr == _tail)
-                {
                     RemoveTail();
-                }
                 else
                 {
                     curr.Prev!.Next = curr.Next;
@@ -122,26 +132,22 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Problem 4: Replace values
+    /// <summary>
+    /// Replace all nodes equal to oldValue with newValue.
+    /// </summary>
     public void Replace(int oldValue, int newValue)
     {
         Node? curr = _head;
         while (curr is not null)
         {
             if (curr.Data == oldValue)
-            {
                 curr.Data = newValue;
-            }
             curr = curr.Next;
         }
     }
 
-    // Forward iterator
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-
+    // Forward iteration
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     public IEnumerator<int> GetEnumerator()
     {
         var curr = _head;
@@ -152,7 +158,9 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // Problem 5: Reverse iterator
+    /// <summary>
+    /// Backward iteration (for Reverse tests).
+    /// </summary>
     public IEnumerable Reverse()
     {
         var curr = _tail;
@@ -163,33 +171,30 @@ public class LinkedList : IEnumerable<int>
         }
     }
 
-    // ToString override
-    public override string ToString()
-    {
-        return "<LinkedList>{" + string.Join(", ", this) + "}";
-    }
+    public override string ToString() =>
+        "<LinkedList>{" + string.Join(", ", this) + "}";
 
-    // Testing helpers
-    public Boolean HeadAndTailAreNull()
-    {
-        return _head is null && _tail is null;
-    }
+    // Helpers for tests
+    public bool HeadAndTailAreNull() =>
+        _head is null && _tail is null;
+    public bool HeadAndTailAreNotNull() =>
+        _head is not null && _tail is not null;
 
-    public Boolean HeadAndTailAreNotNull()
-    {
-        return _head is not null && _tail is not null;
-    }
-
-    // Internal Node class
+    // Inner Node class
     private class Node
     {
         public int Data;
         public Node? Prev;
         public Node? Next;
-
-        public Node(int data)
-        {
-            Data = data;
-        }
+        public Node(int data) => Data = data;
     }
+}
+
+/// <summary>
+/// Extension to support .AsString() on IEnumerable for ReverseTests.
+/// </summary>
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array) =>
+        "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
 }
