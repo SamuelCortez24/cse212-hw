@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 public class BinarySearchTree : IEnumerable<int>
 {
@@ -11,14 +12,14 @@ public class BinarySearchTree : IEnumerable<int>
     {
         // Create new node
         Node newNode = new(value);
-        // If the list is empty, then point both head and tail to the new node.
+        // If the tree is empty, set root
         if (_root is null)
         {
             _root = newNode;
         }
-        // If the list is not empty, then only head will be affected.
         else
         {
+            // Node.Insert already handles duplicates (does nothing when equal)
             _root.Insert(value);
         }
     }
@@ -26,15 +27,13 @@ public class BinarySearchTree : IEnumerable<int>
     /// <summary>
     /// Check to see if the tree contains a certain value
     /// </summary>
-    /// <param name="value">The value to look for</param>
-    /// <returns>true if found, otherwise false</returns>
     public bool Contains(int value)
     {
         return _root != null && _root.Contains(value);
     }
 
     /// <summary>
-    /// Yields all values in the tree
+    /// Yields all values in the tree (ascending order)
     /// </summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
@@ -43,7 +42,7 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Iterate forward through the BST
+    /// Iterate forward through the BST (in-order: left, root, right)
     /// </summary>
     public IEnumerator<int> GetEnumerator()
     {
@@ -66,7 +65,7 @@ public class BinarySearchTree : IEnumerable<int>
     }
 
     /// <summary>
-    /// Iterate backward through the BST.
+    /// Iterate backward through the BST (descending order)
     /// </summary>
     public IEnumerable Reverse()
     {
@@ -78,9 +77,18 @@ public class BinarySearchTree : IEnumerable<int>
         }
     }
 
+    /// <summary>
+    /// Problem 3: TraverseBackward (right, root, left) to get descending order
+    /// </summary>
     private void TraverseBackward(Node? node, List<int> values)
     {
-        // TODO Problem 3
+        if (node is not null)
+        {
+            // Visit right subtree first for descending order
+            TraverseBackward(node.Right, values);
+            values.Add(node.Data);
+            TraverseBackward(node.Left, values);
+        }
     }
 
     /// <summary>
@@ -99,8 +107,14 @@ public class BinarySearchTree : IEnumerable<int>
     }
 }
 
-public static class IntArrayExtensionMethods {
-    public static string AsString(this IEnumerable array) {
+/// <summary>
+/// Extension to support .AsString() on IEnumerable for tests.
+/// (This was present in previous weeks — keep here so tests can call AsString())
+/// </summary>
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array)
+    {
         return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }
